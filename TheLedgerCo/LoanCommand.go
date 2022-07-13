@@ -1,31 +1,35 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type LoanCommand struct {
 	BankName        string
 	BorrowerName    string
-	PrincipalAmount float64
+	PrincipalAmount int
 	NoOfYears       int
-	RateOfInterest  float64
+	RateOfInterest  int
 }
 
 func (l *LoanCommand) CreateLoanAccount() {
 
 	loanAccountUniqueName := fmt.Sprintf("%v_%v", l.BankName, l.BorrowerName)
 
-	interestAmount := (l.PrincipalAmount * float64(l.NoOfYears) * float64(l.NoOfYears) / 100)
+	interestAmount := (l.PrincipalAmount * l.NoOfYears * l.RateOfInterest) / 100
 	la := LoanAccount{
 		BankName:                     l.BankName,
 		BorrowerName:                 l.BorrowerName,
-		OriginalAmountToBePaidAmount: l.PrincipalAmount + interestAmount,
+		OriginalAmountToBePaidAmount: l.PrincipalAmount,
 		PrincipalAmount:              l.PrincipalAmount,
 		NoOfYears:                    l.NoOfYears,
 		RateOfInterest:               l.RateOfInterest,
 		NoOfEMIs:                     l.NoOfYears * 12,
-		EMIAmount:                    float64(l.PrincipalAmount+interestAmount) / float64(l.NoOfYears*12),
+		EMIAmount:                    int(math.Ceil(float64(l.PrincipalAmount+interestAmount) / float64(l.NoOfYears*12))),
+		LumsumPayments:               make([]LumsumPayment, 0),
 	}
 
 	//Make account entry into map
-	maploanAccounts[loanAccountUniqueName] = la
+	maploanAccounts[loanAccountUniqueName] = &la
 }

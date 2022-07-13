@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var maploanAccounts map[string]LoanAccount
+var maploanAccounts map[string]*LoanAccount
 
 func main() {
 
@@ -19,14 +19,14 @@ func main() {
 	// 		return
 	// 	}
 	//testFilePath := os.Args[1]
-	testFilePath := "SampleInput1.txt"
+	testFilePath := "SampleInput2.txt"
 
 	inputFileData, err := os.ReadFile(testFilePath)
 	if err != nil {
 		fmt.Printf("Cannot read the file: %v", err)
 	}
 
-	maploanAccounts = make(map[string]LoanAccount)
+	maploanAccounts = make(map[string]*LoanAccount)
 
 	//Split Commands
 	fileCommands := strings.Split(string(inputFileData), "\n")
@@ -35,25 +35,25 @@ func main() {
 
 		switch commandDetails[0] {
 		case "LOAN":
-			pa, _ := strconv.ParseFloat(commandDetails[3], 64)
+			pa, _ := strconv.ParseInt(commandDetails[3], 10, 64)
 			noy, _ := strconv.ParseInt(commandDetails[4], 10, 64)
-			roi, _ := strconv.ParseFloat(commandDetails[5], 64)
+			roi, _ := strconv.ParseInt(commandDetails[5], 10, 64)
 			l := LoanCommand{
 				BankName:        commandDetails[1],
 				BorrowerName:    commandDetails[2],
-				PrincipalAmount: pa,
+				PrincipalAmount: int(pa),
 				NoOfYears:       int(noy),
-				RateOfInterest:  roi,
+				RateOfInterest:  int(roi),
 			}
 			l.CreateLoanAccount()
 
 		case "PAYMENT":
-			la, _ := strconv.ParseFloat(commandDetails[3], 64)
+			la, _ := strconv.ParseInt(commandDetails[3], 10, 64)
 			laen, _ := strconv.ParseInt(commandDetails[4], 10, 64)
 			p := PaymentCommand{
 				BankName:                  commandDetails[1],
 				BorrowerName:              commandDetails[2],
-				LumpSumAmount:             la,
+				LumpSumAmount:             int(la),
 				LumpSumPaidAfterEMINumber: int(laen),
 			}
 			p.UpdateLoanAccount()

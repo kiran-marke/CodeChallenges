@@ -5,7 +5,7 @@ import "fmt"
 type PaymentCommand struct {
 	BankName                  string
 	BorrowerName              string
-	LumpSumAmount             float64
+	LumpSumAmount             int
 	LumpSumPaidAfterEMINumber int
 }
 
@@ -15,7 +15,12 @@ func (p *PaymentCommand) UpdateLoanAccount() {
 
 	//Fetch Ban account entry from map
 	if la, ok := maploanAccounts[loanAccountUniqueName]; ok {
-		la.PrincipalAmount = la.PrincipalAmount - p.LumpSumAmount
-		la.NoOfEMIs = la.NoOfEMIs - p.LumpSumPaidAfterEMINumber
+
+		lumsum := LumsumPayment{
+			LumpSumAmount:             p.LumpSumAmount,
+			LumpSumPaidAfterEMINumber: p.LumpSumPaidAfterEMINumber,
+		}
+		la.LumsumPayments = append(la.LumsumPayments, lumsum)
 	}
+
 }

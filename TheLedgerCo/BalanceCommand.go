@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type BalanceCommand struct {
 	BankName     string
@@ -11,7 +14,7 @@ type BalanceCommand struct {
 type BalanceResponse struct {
 	BankName       string
 	BorrowerName   string
-	AmountPaid     float64
+	AmountPaid     int
 	Remaining_EMIs int
 }
 
@@ -24,8 +27,15 @@ func (b *BalanceCommand) GetLoanAccountDetails() BalanceResponse {
 	if la, ok := maploanAccounts[loanAccountUniqueName]; ok {
 		res.BankName = la.BankName
 		res.BorrowerName = la.BorrowerName
-		res.AmountPaid = float64(b.EMIs * int(la.EMIAmount))
-		res.Remaining_EMIs = la.NoOfEMIs - b.EMIs
+		var totalAmountPaid int
+
+		for _, v := range la.LumsumPayments {
+			if b.EMIs >= v.LumpSumPaidAfterEMINumber {
+				totalAmountPaid = totalAmountPaid + v.LumpSumAmount
+			}
+		}
+		res.AmountPaid = totalAmountPaid + b.EMIs*la.EMIAmount
+		res.Remaining_EMIs = la.NoOfEMIs - b.EMIs - int(math.Floor(float64(totalAmountPaid)/(float64(la.EMIAmount))))
 	}
 
 	return res
