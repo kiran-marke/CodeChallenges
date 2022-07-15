@@ -15,7 +15,7 @@ func main() {
 		fmt.Println(`
 	Program excuted with insufficient arguments.
 	Sample Execution:
-	./TheLedgerCo.exe "<TestFilePath>"`)
+	./TheLedgerCo "<TestFilePath>"`)
 		return
 	}
 	testFilePath := os.Args[1]
