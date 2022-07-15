@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
@@ -11,17 +12,19 @@ var maploanAccounts map[string]*LoanAccount
 
 func main() {
 
-	if len(os.Args) != 2 {
+	if len(os.Args) < 2 {
 		fmt.Println(`
 	Program excuted with insufficient arguments.
 	Sample Execution:
-	./TheLedgerCo "<TestFilePath>"`)
+	./geektrust "<TestFilePath>"`)
 		return
 	}
+
 	testFilePath := os.Args[1]
 	//testFilePath := "SampleInputMultiplePayments.txt"
 
-	inputFileData, err := os.ReadFile(testFilePath)
+	inputFileData, err := ioutil.ReadFile(testFilePath)
+
 	if err != nil {
 		fmt.Printf("Cannot read the file: %v", err)
 	}
