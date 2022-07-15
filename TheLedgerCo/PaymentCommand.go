@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type PaymentCommand struct {
 	BankName                  string
 	BorrowerName              string
@@ -11,9 +9,9 @@ type PaymentCommand struct {
 
 func (p *PaymentCommand) UpdateLoanAccount() {
 
-	loanAccountUniqueName := fmt.Sprintf("%v_%v", p.BankName, p.BorrowerName)
+	loanAccountUniqueName := getLoanAccountUniqueName(p.BankName, p.BorrowerName)
 
-	//Fetch Ban account entry from map
+	//Fetch Loan account entry from map
 	if la, ok := maploanAccounts[loanAccountUniqueName]; ok {
 
 		lumsum := LumsumPayment{

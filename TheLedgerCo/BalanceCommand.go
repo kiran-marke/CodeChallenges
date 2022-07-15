@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -20,10 +19,10 @@ type BalanceResponse struct {
 
 func (b *BalanceCommand) GetLoanAccountDetails() BalanceResponse {
 
-	loanAccountUniqueName := fmt.Sprintf("%v_%v", b.BankName, b.BorrowerName)
+	loanAccountUniqueName := getLoanAccountUniqueName(b.BankName, b.BorrowerName)
 
 	res := BalanceResponse{}
-	//Fetch Ban account entry from map
+	//Fetch loan account entry from map
 	if la, ok := maploanAccounts[loanAccountUniqueName]; ok {
 		res.BankName = la.BankName
 		res.BorrowerName = la.BorrowerName

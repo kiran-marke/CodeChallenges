@@ -11,15 +11,15 @@ var maploanAccounts map[string]*LoanAccount
 
 func main() {
 
-	// 	if len(os.Args) != 2 {
-	// 		fmt.Println(`
-	// Program excuted with insufficient arguments.
-	// Sample Execution:
-	// ./TheLedgerCo.exe "<TestFilePath>"`)
-	// 		return
-	// 	}
-	//testFilePath := os.Args[1]
-	testFilePath := "SampleInput2.txt"
+	if len(os.Args) != 2 {
+		fmt.Println(`
+	Program excuted with insufficient arguments.
+	Sample Execution:
+	./TheLedgerCo.exe "<TestFilePath>"`)
+		return
+	}
+	testFilePath := os.Args[1]
+	//testFilePath := "SampleInputMultiplePayments.txt"
 
 	inputFileData, err := os.ReadFile(testFilePath)
 	if err != nil {
@@ -28,8 +28,19 @@ func main() {
 
 	maploanAccounts = make(map[string]*LoanAccount)
 
+	printStatments := ReadCommandsOneByOneAndTakeAction(string(inputFileData))
+
+	for _, s := range printStatments {
+		fmt.Println(s)
+	}
+
+}
+
+func ReadCommandsOneByOneAndTakeAction(fileData string) []string {
 	//Split Commands
-	fileCommands := strings.Split(string(inputFileData), "\n")
+	fileCommands := strings.Split(fileData, "\n")
+	var printStatements []string
+
 	for _, c := range fileCommands {
 		commandDetails := strings.Split(c, " ")
 
@@ -66,8 +77,8 @@ func main() {
 				EMIs:         int(remis),
 			}
 			br := b.GetLoanAccountDetails()
-			fmt.Println(fmt.Sprintf("%v %v %v %v", br.BankName, br.BorrowerName, br.AmountPaid, br.Remaining_EMIs))
+			printStatements = append(printStatements, fmt.Sprintf("%v %v %v %v", br.BankName, br.BorrowerName, br.AmountPaid, br.Remaining_EMIs))
 		}
-
 	}
+	return printStatements
 }
